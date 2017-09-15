@@ -10,23 +10,22 @@ using Microsoft.Xna.Framework.Audio;
 
 namespace Pong
 {
-    class Ball : Entity
+    public class Ball : Entity
     {
-        private SoundEffect effect1;
+        private SoundEffect effect;
         private Vector2 speed;
 
-        public Ball(ContentManager Content, Vector2 speed)
+        public Ball(ContentManager Content)
         {
-            this.sprite = Content.Load<Texture2D>("ball");
-            this.speed = speed;
-            Reset();            
-            effect1 = Content.Load<SoundEffect>("wallbounce");
+            sprite = Content.Load<Texture2D>("ball");
+            effect = Content.Load<SoundEffect>("wallbounce");
+            Reset();
         }
 
         public void Reset()
         {
-            pos = new Vector2((Pong.ScreenSize.X - sprite.Width) / 2, (Pong.ScreenSize.Y - sprite.Height) / 2);
-            float xspeed = Pong.Random.NextDouble() <= 0.5D ? 4F : -4F;
+            Pos = new Vector2((Pong.ScreenSize.X - sprite.Width) / 2f, (Pong.ScreenSize.Y - sprite.Height) / 2f);
+            float xspeed = Pong.Random.NextDouble() <= 0.5f ? 4f : -4f;
             speed = new Vector2( xspeed, (float)(Pong.Random.NextDouble() * 7));
         }
 
@@ -34,31 +33,31 @@ namespace Pong
         {
             float dx, dy;
 
-            dx = pos.X + speed.X;
-            dy = pos.Y + speed.Y;
+            dx = Pos.X + speed.X;
+            dy = Pos.Y + speed.Y;
 
             if (dy + sprite.Height > Pong.ScreenSize.Y)
             {
                 dy = Pong.ScreenSize.Y - sprite.Height;
                 speed.Y *= -1;
-                effect1.Play(0.2f, 0.0f, 0.0f);
+                effect.Play(0.2f, 0.0f, 0.0f);
             }
 
             if (dy < 0)
             {
                 dy = 0;
                 speed.Y *= -1;
-                effect1.Play(0.2f, 0.0f, 0.0f);
+                effect.Play(0.2f, 0.0f, 0.0f);
             }
 
-            pos.X = dx;
-            pos.Y = dy;
+            Pos = new Vector2(dx, Pos.Y);
+            Pos = new Vector2(Pos.X, dy);
             
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(sprite, pos, Color.White);
+            spriteBatch.Draw(sprite, Pos, Color.White);
         }
 
         public Vector2 Speed
@@ -71,6 +70,5 @@ namespace Pong
         {
             get { return sprite; }
         }
-
     }
 }

@@ -1,29 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
-
+using Pong.Managers;
 
 namespace Pong
 {
-    class GameWorld
+    public class GameWorld : GameState
     {
-
-        static List<Entity> entities = new List<Entity>();
-        static int gamestate, loser;
-        static Ball ball;
-        static Paddle paddle1, paddle2;
-        SpriteFont mainFont;
-        ContentManager Content;
-        Song song;        
-
-
+        private static List<Entity> entities = new List<Entity>();
+        private static int gamestate, loser;
+        private static Ball ball;
+        private static Paddle paddle1, paddle2;
+        private SpriteFont mainFont;
+        private ContentManager Content;
+        private Song song;        
+        
         public GameWorld(ContentManager Content)
         {
             //set the gamestate to the start menu
@@ -35,28 +30,26 @@ namespace Pong
             this.song = Content.Load<Song>("music");
         }
         
-
         public static void GameOver(int player)
         {
             loser = player;
             //set the gamestate to the game-over screen
             gamestate = 2;
             //stop the music
-            MediaPlayer.Stop();
-            
+            MediaPlayer.Stop();         
         }
 
         //method to play the music
         public void PlaySong()
         {
-                MediaPlayer.Play(song);
-                MediaPlayer.Volume = 0.2f;
+            MediaPlayer.Play(song);
+            MediaPlayer.Volume = 0.2f;
         }
 
-        public void InitGame()
+        public void Init()
         {
             //initialize the ball and load it to the game
-            ball = new Ball(Content, new Vector2(-5, -3));
+            ball = new Ball(Content);
             entities.Add(ball);
             //initialize 2 paddles and load them to the game
             paddle1 = new Paddle(Content, 1, Keys.W, Keys.S);
@@ -82,17 +75,15 @@ namespace Pong
                     if (Keyboard.GetState().IsKeyDown(Keys.Space))
                     { 
                         entities.Clear();
-                        InitGame();
+                        Init();
                         gamestate = 1;
                     }
                     break;
                 
                 //case 1 updates the entities present in the game
                 case 1:
-                    foreach (Entity entity in entities)
-                    {
-                        entity.Update(gameTime);
-                    }
+                    for (int i = 0; i < entities.Count; i++)
+                        entities[i].Update(gameTime);
                     break;
                 
                 //case 2 is the game-over screen and sets the game back to the starting screen if the spacebar is pressed down
@@ -161,6 +152,5 @@ namespace Pong
         {
             get { return Paddle2; }
         }
-
     }
 }

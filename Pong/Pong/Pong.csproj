@@ -39,6 +39,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Ball.cs" />
+    <Compile Include="Managers\GameStateManager.cs" />
     <Compile Include="PositivePowerups.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="GameWorld.cs" />

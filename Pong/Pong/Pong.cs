@@ -3,26 +3,27 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using Pong.Managers;
 
 namespace Pong
 {
-    
-    class Pong : Game
+    public class Pong : Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
+        private GraphicsDeviceManager graphics;
+        private SpriteBatch spriteBatch;
+        private GameStateManager gamestates;
 
-        static Vector2 screenSize;
-        static Random random = new Random();
-        static GameWorld gameWorld;
+        private static Vector2 screenSize;
+        private static Random random = new Random();
 
         public Pong()
         {
             graphics = new GraphicsDeviceManager(this);
-            screenSize = new Vector2(900F, 600F);
-            graphics.PreferredBackBufferWidth = (int) screenSize.X;
-            graphics.PreferredBackBufferHeight = (int) screenSize.Y;
+            screenSize = new Vector2(900, 600);
+            graphics.PreferredBackBufferWidth = (int)screenSize.X;
+            graphics.PreferredBackBufferHeight = (int)screenSize.Y;
             Content.RootDirectory = "Content";
+            gamestates = new GameStateManager();
         }
 
         protected override void Initialize()
@@ -33,47 +34,32 @@ namespace Pong
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            gameWorld = new GameWorld(Content);
+            GameWorld gameWorld = new GameWorld(Content);
+            gamestates.AddState("classic", gameWorld);
+            gamestates.SetActiveState("classic");
         }
         
-        protected override void UnloadContent()
-        {
-            
-        }
+        protected override void UnloadContent() { }
         
         protected override void Update(GameTime gameTime)
         {
-            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
-
-            gameWorld.Update(gameTime);
-
             base.Update(gameTime);
+            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
+                Exit();
+                return;
+            }
+            gamestates.Update(gameTime);
         }
         
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(new Color(0, 0, 50));
-
-            gameWorld.Draw(gameTime, spriteBatch);
-
+            gamestates.Draw(gameTime, spriteBatch);
             base.Draw(gameTime);
         }
-
-        public static GameWorld GameWorld
-        {
-            get { return gameWorld; }
-        }
-
-        public static Random Random
-        {
-            get { return random; }
-        }
-
-        public static Vector2 ScreenSize
-        {
-            get { return screenSize; }
-        }
-
+        
+        public static Random Random { get { return random; } }
+        public static Vector2 ScreenSize { get { return screenSize; } }
     }
 }

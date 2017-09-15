@@ -10,23 +10,23 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Pong
 {
-    class Powerups : Entity
+    public class Powerups : Entity
     {
         private SoundEffect posPickup;
         private bool powerupOnScreen;
 
         public Powerups(ContentManager Content)
         {
-            this.sprite = Content.Load<Texture2D>("Powerup");
-            Spawn();
+            sprite = Content.Load<Texture2D>("Powerup");
             posPickup = Content.Load<SoundEffect>("Pickup");
+            Spawn();
         }
 
         public void Spawn()
         {
             double y = Pong.Random.NextDouble();
             float spawnDeviation = (float)y;
-            pos = new Vector2((Pong.ScreenSize.X - sprite.Width) / 2, (Pong.ScreenSize.Y - sprite.Height) / 2 * spawnDeviation);
+            Pos = new Vector2((Pong.ScreenSize.X - sprite.Width) / 2, (Pong.ScreenSize.Y - sprite.Height) / 2 * spawnDeviation);
             powerupOnScreen = true;
         }
 
@@ -37,7 +37,7 @@ namespace Pong
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(sprite, pos, Color.White);
+            spriteBatch.Draw(sprite, Pos, Color.White);
         }
     }
 }
