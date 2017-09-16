@@ -38,15 +38,19 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Ball.cs" />
-    <Compile Include="Managers\GameStateManager.cs" />
-    <Compile Include="PositivePowerups.cs" />
-    <Compile Include="Entity.cs" />
-    <Compile Include="GameWorld.cs" />
-    <Compile Include="Paddle.cs" />
+    <Compile Include="Core\DataManager.cs" />
+    <Compile Include="Core\UI.cs" />
+    <Compile Include="Objects\Ball.cs" />
+    <Compile Include="Core\GameObjectManager.cs" />
+    <Compile Include="Core\GameStateManager.cs" />
+    <Compile Include="Objects\PositivePowerups.cs" />
+    <Compile Include="Core\GameObject.cs" />
+    <Compile Include="States\ClassicPong.cs" />
+    <Compile Include="Objects\Paddle.cs" />
     <Compile Include="Pong.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="States\GameOverMenu.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

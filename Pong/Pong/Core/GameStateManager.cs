@@ -7,9 +7,28 @@ namespace Pong.Managers
 {
     public interface GameState
     {
-        void Init();
+        void Load();
+        void Unload();
         void Update(GameTime time);
         void Draw(GameTime gameTime, SpriteBatch spriteBatch);
+        GameStateChange RequestStateChange();
+    }
+    
+    public enum CHANGETYPE
+    {
+        LOAD,
+        SWITCH
+    }
+
+    public class GameStateChange
+    {
+        public string newstate;
+        public CHANGETYPE type;
+        public GameStateChange(string s, CHANGETYPE t)
+        {
+            newstate = s;
+            type = t;
+        }
     }
 
     public class GameStateManager
@@ -23,10 +42,23 @@ namespace Pong.Managers
             currentstate = null;
         }
 
+        private void PollRequest()
+        {
+            GameStateChange change = currentstate.RequestStateChange();
+            if (change != null)
+            {
+                if (change.type == CHANGETYPE.LOAD) currentstate.Unload();
+                SetActiveState(change.newstate);
+                if (change.type == CHANGETYPE.LOAD) currentstate.Load();
+            }
+        }
+
         public void Update(GameTime time)
         {
             if (currentstate == null) return;
+            PollRequest();
             currentstate.Update(time);
+            PollRequest();
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -39,7 +71,7 @@ namespace Pong.Managers
         {
             if (state == null) return;
             states.Add(name, state);
-            states[name].Init();
+            states[name].Load();
         }
 
         public void RemoveState(string name)

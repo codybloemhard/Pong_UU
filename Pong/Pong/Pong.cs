@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using Pong.Managers;
+using Pong.States;
 
 namespace Pong
 {
@@ -34,8 +35,10 @@ namespace Pong
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            GameWorld gameWorld = new GameWorld(Content);
+            ClassicPong gameWorld = new ClassicPong(Content);
+            GameOverMenu gameoverMenu = new GameOverMenu(Content);
             gamestates.AddState("classic", gameWorld);
+            gamestates.AddState("gameover", gameoverMenu);
             gamestates.SetActiveState("classic");
         }
         

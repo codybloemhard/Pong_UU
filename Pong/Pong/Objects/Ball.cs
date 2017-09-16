@@ -1,32 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Audio;
+using Pong.Core;
 
 namespace Pong
 {
-    public class Ball : Entity
+    public class Ball : GameObject
     {
         private SoundEffect effect;
         private Vector2 speed;
 
         public Ball(ContentManager Content)
         {
+            tag = "ball";
             sprite = Content.Load<Texture2D>("ball");
             effect = Content.Load<SoundEffect>("wallbounce");
-            Reset();
         }
 
-        public void Reset()
+        public override void Init()
         {
             Pos = new Vector2((Pong.ScreenSize.X - sprite.Width) / 2f, (Pong.ScreenSize.Y - sprite.Height) / 2f);
-            float xspeed = Pong.Random.NextDouble() <= 0.5f ? 4f : -4f;
-            speed = new Vector2( xspeed, (float)(Pong.Random.NextDouble() * 7));
+            float xspeed = Pong.Random.NextDouble() <= 0.5f ? 1f : -1f;
+            float yspeed = (float)Pong.Random.NextDouble() * 2 - 1;
+            speed = new Vector2(xspeed, yspeed);
+            speed.Normalize();
+            speed *= 6.0f;
         }
 
         public override void Update(GameTime gameTime)
@@ -52,7 +53,6 @@ namespace Pong
 
             Pos = new Vector2(dx, Pos.Y);
             Pos = new Vector2(Pos.X, dy);
-            
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)

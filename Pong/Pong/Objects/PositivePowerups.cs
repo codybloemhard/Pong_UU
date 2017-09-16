@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Pong.Core;
 
 namespace Pong
 {
-    public class Powerups : Entity
+    public class Powerups : GameObject
     {
         private SoundEffect posPickup;
         private bool powerupOnScreen;
@@ -20,6 +18,11 @@ namespace Pong
             sprite = Content.Load<Texture2D>("Powerup");
             posPickup = Content.Load<SoundEffect>("Pickup");
             Spawn();
+        }
+
+        public override void Init()
+        {
+            
         }
 
         public void Spawn()
