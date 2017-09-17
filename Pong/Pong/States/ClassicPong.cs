@@ -5,7 +5,6 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
-using Pong.Managers;
 using Pong.Core;
 
 namespace Pong.States
@@ -15,19 +14,17 @@ namespace Pong.States
         private GameObject.GameObjectManager objects;
         private Ball ball;
         private Paddle paddle0, paddle1;
-        private ContentManager content;
         private Song song;
         private GameStateChange needstate = null;
 
-        public ClassicPong(ContentManager content)
+        public ClassicPong()
         {
-            this.content = content;
         }
         
         public void GameOver(int player)
         {
             MediaPlayer.Stop();
-            DataManager.StoreInt("loser", player);
+            DataManager.SetData<int>("loser", player);
             needstate = new GameStateChange("gameover", CHANGETYPE.LOAD);
         }
 
@@ -43,16 +40,16 @@ namespace Pong.States
             needstate = null;
             objects = new GameObject.GameObjectManager();
             //Construct all objects and add them
-            ball = new Ball(content);
-            paddle0 = new Paddle(content, 0, Keys.W, Keys.S);
-            paddle1 = new Paddle(content, 1, Keys.Up, Keys.Down);
+            ball = new Ball();
+            paddle0 = new Paddle(0, Keys.W, Keys.S);
+            paddle1 = new Paddle(1, Keys.Up, Keys.Down);
             objects.Add(ball);
             objects.Add(paddle0);
             objects.Add(paddle1);
             //Init the manager before we play
             objects.Init();
             //load the music
-            song = content.Load<Song>("music");
+            song = AssetManager.GetResource<Song>("music");
             PlaySong();
         }
 

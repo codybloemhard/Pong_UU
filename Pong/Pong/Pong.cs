@@ -3,7 +3,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
-using Pong.Managers;
+using Microsoft.Xna.Framework.Content;
+using Pong.Core;
 using Pong.States;
 
 namespace Pong
@@ -24,6 +25,7 @@ namespace Pong
             graphics.PreferredBackBufferWidth = (int)screenSize.X;
             graphics.PreferredBackBufferHeight = (int)screenSize.Y;
             Content.RootDirectory = "Content";
+            AssetManager.content = Content;
             gamestates = new GameStateManager();
         }
 
@@ -35,8 +37,8 @@ namespace Pong
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            ClassicPong gameWorld = new ClassicPong(Content);
-            GameOverMenu gameoverMenu = new GameOverMenu(Content);
+            ClassicPong gameWorld = new ClassicPong();
+            GameOverMenu gameoverMenu = new GameOverMenu();
             gamestates.AddState("classic", gameWorld);
             gamestates.AddState("gameover", gameoverMenu);
             gamestates.SetActiveState("classic");

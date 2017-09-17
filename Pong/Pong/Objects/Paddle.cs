@@ -17,21 +17,21 @@ namespace Pong
         private SoundEffect effect1, effect2;
         private Ball ball;
 
-        public Paddle(ContentManager Content, int player, Keys keyUp, Keys keyDown)
+        public Paddle(int player, Keys keyUp, Keys keyDown)
         {
             tag = "paddle";
-            effect1 = Content.Load<SoundEffect>("paddlebounce");
-            effect2 = Content.Load<SoundEffect>("minuslife");
+            effect1 = AssetManager.GetResource<SoundEffect>("paddlebounce");
+            effect2 = AssetManager.GetResource<SoundEffect>("minuslife");
             this.player = player;
             //these 2 cases create the two different paddles on screen
             if(player == 0)
             {
-                sprite = Content.Load<Texture2D>("paddle1");
+                sprite = AssetManager.GetResource<Texture2D>("paddle1");
                 Pos = new Vector2(0, (Pong.ScreenSize.Y - sprite.Height) / 2);
             }
             else if(player == 1)
             {
-                this.sprite = Content.Load<Texture2D>("paddle2");
+                this.sprite = AssetManager.GetResource<Texture2D>("paddle2");
                 this.Pos = new Vector2((Pong.ScreenSize.X - sprite.Width), (Pong.ScreenSize.Y - sprite.Height) / 2);
             }
             this.keyUp = keyUp;

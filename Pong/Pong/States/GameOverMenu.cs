@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
-using Pong.Managers;
 using Pong.Core;
 
 namespace Pong.States
@@ -12,20 +11,18 @@ namespace Pong.States
     public class GameOverMenu : GameState
     {
         private SpriteFont mainFont;
-        private ContentManager content;
         private GameStateChange needstate = null;
         private string message = ""; 
 
-        public GameOverMenu(ContentManager content)
+        public GameOverMenu()
         {
-            this.content = content;
         }
 
         public void Load()
         {
             needstate = null;
-            message = "Player " + DataManager.GetInt("loser") + " lost! Press [SPACE] to restart.";
-            mainFont = content.Load<SpriteFont>("mainFont");
+            message = "Player " + DataManager.GetData<int>("loser") + " lost! Press [SPACE] to restart.";
+            mainFont = AssetManager.GetResource<SpriteFont>("mainFont");
         }
 
         public void Unload()

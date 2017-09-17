@@ -13,11 +13,11 @@ namespace Pong
         private SoundEffect effect;
         private Vector2 speed;
 
-        public Ball(ContentManager Content)
+        public Ball()
         {
             tag = "ball";
-            sprite = Content.Load<Texture2D>("ball");
-            effect = Content.Load<SoundEffect>("wallbounce");
+            sprite = AssetManager.GetResource<Texture2D>("ball");
+            effect = AssetManager.GetResource<SoundEffect>("wallbounce");
         }
 
         public override void Init()
