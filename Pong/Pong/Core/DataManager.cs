@@ -3,91 +3,30 @@ using System.Collections.Generic;
 
 namespace Pong.Core
 {
-    public interface BasicItem { }
-
-    public class IntItem : BasicItem
-    {
-        public int data;
-        public IntItem(int data) { this.data = data; }
-    }
-    public class FloatItem : BasicItem
-    {
-        public float data;
-        public FloatItem(float data) { this.data = data; }
-    }
-    public class StringItem : BasicItem
-    {
-        public string data;
-        public StringItem(string data) { this.data = data; }
-    }
-
-    public class Item
-    {
-        public BasicItem dataItem;
-        public Item(BasicItem dataItem)
-        {
-            this.dataItem = dataItem;
-        }
-    }
-
     public static class DataManager
     {
-        private static Dictionary<string, Item> items;
+        private static GenericDatabase database;
 
         static DataManager()
         {
-            items = new Dictionary<string, Item>();
+            database = new GenericDatabase();
         }
 
-        public static void StoreItem(string name, Item item)
+        public static void DeleteData(string name)
         {
-            items.Add(name, item);
-        }
-        public static void DeleteItem(string name)
-        {
-            if (items.ContainsKey(name))
-                items.Remove(name);
-        }
-        
-        public static int GetInt(string name)
-        {
-            if (items.ContainsKey(name))
-                return (items[name].dataItem as IntItem).data;
-            return 0;
-        }
-        public static float GetFloat(string name)
-        {
-            if (items.ContainsKey(name))
-                return (items[name].dataItem as FloatItem).data;
-            return 0.0f;
-        }
-        public static string GetString(string name)
-        {
-            if (items.ContainsKey(name))
-                return (items[name].dataItem as StringItem).data;
-            return "";
+            database.DeleteItem(name);
         }
 
-        public static void StoreInt(string name, int data)
+        public static T GetData<T>(string name)
         {
-            if (!items.ContainsKey(name))
-                StoreItem(name, new Item(new IntItem(data)));
-            else
-                (items[name].dataItem as IntItem).data = data;
+            T res;
+            database.GetData<T>(name, out res);
+            return res;
         }
-        public static void StoreFloat(string name, float data)
+
+        public static void SetData<T>(string name, T data)
         {
-            if (!items.ContainsKey(name))
-                StoreItem(name, new Item(new FloatItem(data)));
-            else
-                (items[name].dataItem as FloatItem).data = data;
-        }
-        public static void StoreString(string name, string data)
-        {
-            if (!items.ContainsKey(name))
-                StoreItem(name, new Item(new StringItem(data)));
-            else
-                (items[name].dataItem as StringItem).data = data;
+            database.SetData<T>(name, data);
         }
     }
 }
