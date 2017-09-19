@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Media;
 using Pong.Core;
 using Pong.States;
 
@@ -16,6 +17,8 @@ namespace Pong
         private Keys keyUp, keyDown;
         private SoundEffect effect1, effect2;
         private Ball ball;
+        private Colourizer colours;
+        public Color colour;
 
         public Paddle(int player, Keys keyUp, Keys keyDown)
         {
@@ -24,16 +27,11 @@ namespace Pong
             effect2 = AssetManager.GetResource<SoundEffect>("minuslife");
             this.player = player;
             //these 2 cases create the two different paddles on screen
-            if(player == 0)
-            {
-                sprite = AssetManager.GetResource<Texture2D>("paddle1");
+            sprite = AssetManager.GetResource<Texture2D>("paddle");
+            if (player == 0)
                 Pos = new Vector2(0, (Pong.ScreenSize.Y - sprite.Height) / 2);
-            }
             else if(player == 1)
-            {
-                this.sprite = AssetManager.GetResource<Texture2D>("paddle2");
-                this.Pos = new Vector2((Pong.ScreenSize.X - sprite.Width), (Pong.ScreenSize.Y - sprite.Height) / 2);
-            }
+                Pos = new Vector2((Pong.ScreenSize.X - sprite.Width), (Pong.ScreenSize.Y - sprite.Height) / 2);
             this.keyUp = keyUp;
             this.keyDown = keyDown;
             speed = 8.0f;
@@ -43,13 +41,22 @@ namespace Pong
         public override void Init()
         {
             ball = FindWithTag("ball") as Ball;
+            colours = FindWithTag("colourizer") as Colourizer;
+            colour = colours.GetColour();
         }
 
         private void LoseLife()
         {
             lives--;
             ball.Init();
+            ball.colour = colour;
             effect2.Play(0.2f, 0.0f, 0.0f);
+            if(lives <= 0)
+            {
+                MediaPlayer.Stop();
+                DataManager.SetData<int>("loser", player + 1);
+                GameStateManager.RequestChange(new GameStateChange("gameover", CHANGETYPE.LOAD));
+            }
         }
 
         public override void Update(GameTime gameTime)
@@ -64,6 +71,7 @@ namespace Pong
             {
                 ball.Speed = new Vector2(ball.Speed.X * -1.05f, ball.Speed.Y * 1.05f);
                 effect1.Play(0.2f, 0.0f, 0.0f);
+                colours.NextColour();
             }
 
             if (player == 0 && ball.Pos.X + ball.GetBounds().Width < 0)
@@ -74,7 +82,7 @@ namespace Pong
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(sprite, Pos, Color.White);
+            spriteBatch.Draw(sprite, Pos, colour);
         }
 
         public int Lives { get { return lives; } }

@@ -12,6 +12,7 @@ namespace Pong
     {
         private SoundEffect effect;
         private Vector2 speed;
+        public Color colour;
 
         public Ball()
         {
@@ -28,6 +29,7 @@ namespace Pong
             speed = new Vector2(xspeed, yspeed);
             speed.Normalize();
             speed *= 6.0f;
+            colour = Color.White;
         }
 
         public override void Update(GameTime gameTime)
@@ -57,7 +59,7 @@ namespace Pong
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(sprite, Pos, Color.White);
+            spriteBatch.Draw(sprite, Pos, colour);
         }
 
         public Vector2 Speed

@@ -11,7 +11,6 @@ namespace Pong.States
     public class GameOverMenu : GameState
     {
         private SpriteFont mainFont;
-        private GameStateChange needstate = null;
         private string message = ""; 
 
         public GameOverMenu()
@@ -20,7 +19,6 @@ namespace Pong.States
 
         public void Load()
         {
-            needstate = null;
             message = "Player " + DataManager.GetData<int>("loser") + " lost! Press [SPACE] to restart.";
             mainFont = AssetManager.GetResource<SpriteFont>("mainFont");
         }
@@ -29,20 +27,16 @@ namespace Pong.States
         {
             
         }
-
-        public GameStateChange RequestStateChange()
-        {
-            return needstate;
-        }
-
+        
         public void Update(GameTime time)
         {
             if (Keyboard.GetState().IsKeyDown(Keys.Space))
-                needstate = new GameStateChange("classic", CHANGETYPE.LOAD);
+                GameStateManager.RequestChange(new GameStateChange("classic", CHANGETYPE.LOAD));
         }
 
-        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        public void Draw(GameTime gameTime, SpriteBatch spriteBatch, GraphicsDevice device)
         {
+            device.Clear(Color.Black);
             spriteBatch.Begin();
             UI.WriteCenter(spriteBatch, message, mainFont, Color.White);
             spriteBatch.End();

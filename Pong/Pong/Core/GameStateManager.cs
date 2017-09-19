@@ -10,8 +10,7 @@ namespace Pong.Core
         void Load();
         void Unload();
         void Update(GameTime time);
-        void Draw(GameTime gameTime, SpriteBatch spriteBatch);
-        GameStateChange RequestStateChange();
+        void Draw(GameTime gameTime, SpriteBatch spriteBatch, GraphicsDevice device);
     }
     
     public enum CHANGETYPE
@@ -35,36 +34,40 @@ namespace Pong.Core
     {
         private Dictionary<string, GameState> states;
         private GameState currentstate;
+        private static GameStateManager instance;
 
         public GameStateManager()
         {
+            if (instance != null) return;
             states = new Dictionary<string, GameState>();
             currentstate = null;
+            instance = this;
         }
 
-        private void PollRequest()
+        private void SetState(string name)
         {
-            GameStateChange change = currentstate.RequestStateChange();
-            if (change != null)
-            {
-                if (change.type == CHANGETYPE.LOAD) currentstate.Unload();
-                SetActiveState(change.newstate);
-                if (change.type == CHANGETYPE.LOAD) currentstate.Load();
-            }
+            if (states.ContainsKey(name))
+                currentstate = states[name];
+        }
+
+        public static void RequestChange(GameStateChange change)
+        {
+            if (change == null) return;
+            if (change.type == CHANGETYPE.LOAD) instance.currentstate.Unload();
+            instance.SetState(change.newstate);
+            if (change.type == CHANGETYPE.LOAD) instance.currentstate.Load();
         }
 
         public void Update(GameTime time)
         {
             if (currentstate == null) return;
-            PollRequest();
             currentstate.Update(time);
-            PollRequest();
         }
 
-        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        public void Draw(GameTime gameTime, SpriteBatch spriteBatch, GraphicsDevice device)
         {
             if (currentstate == null) return;
-            currentstate.Draw(gameTime, spriteBatch);
+            currentstate.Draw(gameTime, spriteBatch, device);
         }
 
         public void AddState(string name, GameState state)
@@ -80,10 +83,10 @@ namespace Pong.Core
                 states.Remove(name);
         }
 
-        public void SetActiveState(string name)
+        public void SetStartingState(string name)
         {
-            if (states.ContainsKey(name))
-                currentstate = states[name];
+            if (currentstate != null) return;
+            SetState(name);
         }
     }
 }

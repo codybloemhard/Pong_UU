@@ -45,6 +45,7 @@
     <Compile Include="Objects\Ball.cs" />
     <Compile Include="Core\GameObjectManager.cs" />
     <Compile Include="Core\GameStateManager.cs" />
+    <Compile Include="Objects\Colourizer.cs" />
     <Compile Include="Objects\PositivePowerups.cs" />
     <Compile Include="Core\GameObject.cs" />
     <Compile Include="States\ClassicPong.cs" />

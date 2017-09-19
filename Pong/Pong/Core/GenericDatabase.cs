@@ -5,25 +5,19 @@ namespace Pong.Core
 {
     public interface _item { }
 
-    public class BasicItem<T> : _item
+    public class Item<T> : _item
     {
         public T data;
-        public BasicItem(T t) { data = t; }
-    }
-
-    public class Item
-    {
-        public _item dataItem;
-        public Item(_item dataItem) { this.dataItem = dataItem; }
+        public Item(T t) { data = t; }
     }
 
     public class GenericDatabase
     {
-        private Dictionary<string, Item> items;
+        private Dictionary<string, _item> items;
 
         public GenericDatabase()
         {
-            items = new Dictionary<string, Item>();
+            items = new Dictionary<string, _item>();
         }
 
         public void DeleteItem(string name)
@@ -36,7 +30,7 @@ namespace Pong.Core
         {
             if (items.ContainsKey(name))
             {
-                result = (items[name].dataItem as BasicItem<T>).data;
+                result = (items[name] as Item<T>).data;
                 return true;
             }
             result = default(T);
@@ -47,10 +41,10 @@ namespace Pong.Core
         {
             if (items.ContainsKey(name))
             {
-                (items[name].dataItem as BasicItem<T>).data = data;
+                (items[name] as Item<T>).data = data;
                 return true;
             }
-            items.Add(name, new Item(new BasicItem<T>(data)));
+            items.Add(name, new Item<T>(data));
             return false;
         }
     }

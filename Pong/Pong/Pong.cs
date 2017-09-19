@@ -41,7 +41,7 @@ namespace Pong
             GameOverMenu gameoverMenu = new GameOverMenu();
             gamestates.AddState("classic", gameWorld);
             gamestates.AddState("gameover", gameoverMenu);
-            gamestates.SetActiveState("classic");
+            gamestates.SetStartingState("gameover");
         }
         
         protected override void UnloadContent() { }
@@ -59,8 +59,7 @@ namespace Pong
         
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(new Color(0, 0, 50));
-            gamestates.Draw(gameTime, spriteBatch);
+            gamestates.Draw(gameTime, spriteBatch, GraphicsDevice);
             base.Draw(gameTime);
         }
         
