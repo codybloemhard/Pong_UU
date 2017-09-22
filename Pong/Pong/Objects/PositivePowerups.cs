@@ -29,7 +29,7 @@ namespace Pong
         {
             double y = Pong.Random.NextDouble();
             float spawnDeviation = (float)y;
-            Pos = new Vector2((Pong.ScreenSize.X - sprite.Width) / 2, (Pong.ScreenSize.Y - sprite.Height) / 2 * spawnDeviation);
+            Pos = new Vector2((Grid.ScreenSize.X - sprite.Width) / 2, (Grid.ScreenSize.Y - sprite.Height) / 2 * spawnDeviation);
             powerupOnScreen = true;
         }
 

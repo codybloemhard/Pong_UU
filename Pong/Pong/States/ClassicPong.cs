@@ -43,7 +43,7 @@ namespace Pong.States
             objects.Clear();
             song.Dispose();
         }
-
+        
         public void Update(GameTime gameTime)
         {
             objects.Update(gameTime);
@@ -60,11 +60,11 @@ namespace Pong.States
             for (int i = 0; i < paddle0.Lives; i++)
                 spriteBatch.Draw(ball.Sprite, new Vector2(i * ball.Sprite.Width, 0), uiLivesColour);
             for (int i = 0; i < paddle1.Lives; i++)
-                spriteBatch.Draw(ball.Sprite, new Vector2(Pong.ScreenSize.X - (i + 1) * ball.Sprite.Width, 0), uiLivesColour);
+                spriteBatch.Draw(ball.Sprite, new Vector2(Grid.ScreenSize.X - (i + 1) * ball.Sprite.Width, 0), uiLivesColour);
 
             spriteBatch.End();
         }
-
+        
         //method to play the music
         public void PlaySong()
         {

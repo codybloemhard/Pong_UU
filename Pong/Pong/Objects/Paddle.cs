@@ -18,23 +18,23 @@ namespace Pong
         private SoundEffect effect1, effect2;
         private Ball ball;
         private Colourizer colours;
-        public Color colour;
 
         public Paddle(int player, Keys keyUp, Keys keyDown)
         {
             tag = "paddle";
             effect1 = AssetManager.GetResource<SoundEffect>("paddlebounce");
             effect2 = AssetManager.GetResource<SoundEffect>("minuslife");
+            sprite = AssetManager.GetResource<Texture2D>("paddle");
+            Size = new Vector2(0.2f, 1.5f);
             this.player = player;
             //these 2 cases create the two different paddles on screen
-            sprite = AssetManager.GetResource<Texture2D>("paddle");
             if (player == 0)
-                Pos = new Vector2(0, (Pong.ScreenSize.Y - sprite.Height) / 2);
+                Pos = new Vector2(0, (Grid.GridSize.Y - Size.Y) / 2f);
             else if(player == 1)
-                Pos = new Vector2((Pong.ScreenSize.X - sprite.Width), (Pong.ScreenSize.Y - sprite.Height) / 2);
+                Pos = new Vector2((Grid.GridSize.X - Size.X), (Grid.GridSize.Y - Size.Y) / 2f);
             this.keyUp = keyUp;
             this.keyDown = keyDown;
-            speed = 8.0f;
+            speed = 0.15f;
             lives = 3;
         }
 
@@ -49,7 +49,7 @@ namespace Pong
         {
             lives--;
             ball.Init();
-            ball.colour = colour;
+            ball.Colour = colour;
             effect2.Play(0.2f, 0.0f, 0.0f);
             if(lives <= 0)
             {
@@ -64,7 +64,7 @@ namespace Pong
             if (Keyboard.GetState().IsKeyDown(keyUp) && Pos.Y > 0)
                 Pos -= Vector2.UnitY * speed;
 
-            if (Keyboard.GetState().IsKeyDown(keyDown) && Pos.Y < Pong.ScreenSize.Y - sprite.Height)
+            if (Keyboard.GetState().IsKeyDown(keyDown) && Pos.Y < Grid.GridSize.Y - Size.Y)
                 Pos += Vector2.UnitY * speed;
 
             if (Collides(ball))
@@ -74,15 +74,15 @@ namespace Pong
                 colours.NextColour();
             }
 
-            if (player == 0 && ball.Pos.X + ball.GetBounds().Width < 0)
+            if (player == 0 && ball.Pos.X + ball.GetBounds().w < 0)
                 LoseLife();
-            else if (player == 1 && ball.Pos.X > Pos.X + sprite.Width)
+            else if (player == 1 && ball.Pos.X > Pos.X + Size.X)
                 LoseLife();
         }
 
-        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        public override void Draw(GameTime time, SpriteBatch batch)
         {
-            spriteBatch.Draw(sprite, Pos, colour);
+            base.Draw(time, batch);
         }
 
         public int Lives { get { return lives; } }

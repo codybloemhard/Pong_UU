@@ -11,6 +11,8 @@ namespace Pong.States
     public class GameOverMenu : GameState
     {
         private SpriteFont mainFont;
+        //private Text text;
+        private Button button;
         private string message = ""; 
 
         public GameOverMenu()
@@ -20,7 +22,16 @@ namespace Pong.States
         public void Load()
         {
             message = "Player " + DataManager.GetData<int>("loser") + " lost! Press [SPACE] to restart.";
+            //text = new Text(message, Vector2.Zero, Grid.ScreenSize);
+            //text.colour = Color.White;
             mainFont = AssetManager.GetResource<SpriteFont>("mainFont");
+            button = new Button("Press to play!", "paddle", () => { loadGame(); }, new Vector2(1,1), new Vector2(3, 1));
+            button.SetupColours(new Color(64,64,64), new Color(96, 96, 96), Color.Black, Color.Red);
+        }
+
+        private void loadGame()
+        {
+            GameStateManager.RequestChange(new GameStateChange("classic", CHANGETYPE.LOAD));
         }
 
         public void Unload()
@@ -30,16 +41,18 @@ namespace Pong.States
         
         public void Update(GameTime time)
         {
-            if (Keyboard.GetState().IsKeyDown(Keys.Space))
-                GameStateManager.RequestChange(new GameStateChange("classic", CHANGETYPE.LOAD));
+            //if (Keyboard.GetState().IsKeyDown(Keys.Space))
+            //GameStateManager.RequestChange(new GameStateChange("classic", CHANGETYPE.LOAD));
+            button.Update();
         }
 
-        public void Draw(GameTime gameTime, SpriteBatch spriteBatch, GraphicsDevice device)
+        public void Draw(GameTime time, SpriteBatch batch, GraphicsDevice device)
         {
             device.Clear(Color.Black);
-            spriteBatch.Begin();
-            UI.WriteCenter(spriteBatch, message, mainFont, Color.White);
-            spriteBatch.End();
+            batch.Begin();
+            //text.Draw(batch, mainFont);
+            button.Draw(batch, mainFont);
+            batch.End();
         }
     }
 }

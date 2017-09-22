@@ -12,24 +12,27 @@ namespace Pong
     {
         private SoundEffect effect;
         private Vector2 speed;
-        public Color colour;
+        private Colourizer colours;
 
         public Ball()
         {
             tag = "ball";
             sprite = AssetManager.GetResource<Texture2D>("ball");
             effect = AssetManager.GetResource<SoundEffect>("wallbounce");
+            Size = new Vector2(0.25f, 0.25f);
         }
 
         public override void Init()
         {
-            Pos = new Vector2((Pong.ScreenSize.X - sprite.Width) / 2f, (Pong.ScreenSize.Y - sprite.Height) / 2f);
+            Pos = new Vector2((Grid.GridSize.X - Size.X) / 2f, (Grid.GridSize.Y - Size.Y) / 2f);
             float xspeed = Pong.Random.NextDouble() <= 0.5f ? 1f : -1f;
             float yspeed = (float)Pong.Random.NextDouble() * 2 - 1;
             speed = new Vector2(xspeed, yspeed);
             speed.Normalize();
-            speed *= 6.0f;
-            colour = Color.White;
+            speed *= 0.1f;
+            if (colours == null)
+                colours = FindWithTag("colourizer") as Colourizer;
+            colour = colours.GetColour();
         }
 
         public override void Update(GameTime gameTime)
@@ -39,13 +42,12 @@ namespace Pong
             dx = Pos.X + speed.X;
             dy = Pos.Y + speed.Y;
 
-            if (dy + sprite.Height > Pong.ScreenSize.Y)
+            if (dy + Size.Y > Grid.GridSize.Y)
             {
-                dy = Pong.ScreenSize.Y - sprite.Height;
+                dy = Grid.GridSize.Y - Size.Y;
                 speed.Y *= -1;
                 effect.Play(0.2f, 0.0f, 0.0f);
             }
-
             if (dy < 0)
             {
                 dy = 0;
@@ -57,9 +59,9 @@ namespace Pong
             Pos = new Vector2(Pos.X, dy);
         }
 
-        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        public override void Draw(GameTime time, SpriteBatch batch)
         {
-            spriteBatch.Draw(sprite, Pos, colour);
+            base.Draw(time, batch);
         }
 
         public Vector2 Speed

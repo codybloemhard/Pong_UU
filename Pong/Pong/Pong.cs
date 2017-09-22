@@ -14,16 +14,14 @@ namespace Pong
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
         private GameStateManager gamestates;
-
-        private static Vector2 screenSize;
         private static Random random = new Random();
 
         public Pong()
         {
             graphics = new GraphicsDeviceManager(this);
-            screenSize = new Vector2(900, 600);
-            graphics.PreferredBackBufferWidth = (int)screenSize.X;
-            graphics.PreferredBackBufferHeight = (int)screenSize.Y;
+            Grid.Setup(16, 9, 1600, 900);
+            graphics.PreferredBackBufferWidth = (int)Grid.ScreenSize.X;
+            graphics.PreferredBackBufferHeight = (int)Grid.ScreenSize.Y;
             Content.RootDirectory = "Content";
             AssetManager.content = Content;
             gamestates = new GameStateManager();
@@ -64,6 +62,5 @@ namespace Pong
         }
         
         public static Random Random { get { return random; } }
-        public static Vector2 ScreenSize { get { return screenSize; } }
     }
 }

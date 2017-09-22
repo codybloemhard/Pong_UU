@@ -57,9 +57,9 @@ namespace Pong
             currentCol++;
             if (currentCol > colours.Length - 1)
                 currentCol = 0;
-            ball.colour = colours[currentCol];
-            paddle0.colour = colours[currentCol];
-            paddle1.colour = colours[currentCol];
+            ball.Colour = colours[currentCol];
+            paddle0.Colour = colours[currentCol];
+            paddle1.Colour = colours[currentCol];
         }
         
         public Color Lerp(float t, Color a, Color b)

@@ -41,6 +41,7 @@
     <Compile Include="Core\AssetManager.cs" />
     <Compile Include="Core\DataManager.cs" />
     <Compile Include="Core\GenericDatabase.cs" />
+    <Compile Include="Core\GridSpace.cs" />
     <Compile Include="Core\UI.cs" />
     <Compile Include="Objects\Ball.cs" />
     <Compile Include="Core\GameObjectManager.cs" />
