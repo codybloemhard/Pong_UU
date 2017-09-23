@@ -60,6 +60,7 @@ namespace Pong.Core
 
         public void Update(GameTime time)
         {
+            Input.Update();
             if (currentstate == null) return;
             currentstate.Update(time);
         }

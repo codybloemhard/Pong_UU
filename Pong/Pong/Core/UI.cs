@@ -118,11 +118,13 @@ namespace Pong.Core
 
         public void Update()
         {
-            Vector2 mpos = Grid.ToGridSpace(new Vector2(Mouse.GetState().X, Mouse.GetState().Y));
-            bool pressed = Mouse.GetState().LeftButton == ButtonState.Pressed;
+            Vector2 mpos = Input.GetMousePosition();
+            bool down = Input.GetMouseButton(PressAction.DOWN, MouseButton.LEFT);
+            bool pressed = Input.GetMouseButton(PressAction.RELEASED, MouseButton.LEFT);
             bool hover = bounds.Inside(mpos);
             if (hover && pressed) pressAction();
-            if (hover) colour = highlightColour;
+            if (hover && down) colour = downColour;
+            else if (hover) colour = highlightColour;
             else colour = baseColour;
         }
 

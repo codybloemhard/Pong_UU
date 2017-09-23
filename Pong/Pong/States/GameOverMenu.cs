@@ -26,7 +26,7 @@ namespace Pong.States
             //text.colour = Color.White;
             mainFont = AssetManager.GetResource<SpriteFont>("mainFont");
             button = new Button("Press to play!", "paddle", () => { loadGame(); }, new Vector2(1,1), new Vector2(3, 1));
-            button.SetupColours(new Color(64,64,64), new Color(96, 96, 96), Color.Black, Color.Red);
+            button.SetupColours(new Color(64,64,64), new Color(96, 96, 96), new Color(32, 32, 32), Color.Red);
         }
 
         private void loadGame()

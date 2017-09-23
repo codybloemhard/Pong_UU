@@ -25,6 +25,7 @@ namespace Pong
             Content.RootDirectory = "Content";
             AssetManager.content = Content;
             gamestates = new GameStateManager();
+            this.IsMouseVisible = true;
         }
 
         protected override void Initialize()
