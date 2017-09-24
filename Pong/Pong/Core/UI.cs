@@ -82,7 +82,7 @@ namespace Pong.Core
 
         public void Draw(SpriteBatch batch, SpriteFont font)
         {
-            UI.TextInCenter(text, position, Size, batch, font, colour);
+            UI.TextInCenter(text, Grid.ToScreenSpace(position), Grid.ToScreenSpace(Size), batch, font, colour);
         }
     }
 
@@ -92,7 +92,6 @@ namespace Pong.Core
         protected string text;
         protected Bounds bounds;
         protected Action pressAction;
-        private Color currentColour;
 
         public Button(string text, string texture, Action a,Vector2 position, Vector2 size) 
             : base(texture, position, size)
@@ -114,6 +113,7 @@ namespace Pong.Core
             this.highlightColour = highlightColour;
             this.downColour = downColour;
             this.textColour = textColour;
+            colour = baseColour;
         }
 
         public void Update()

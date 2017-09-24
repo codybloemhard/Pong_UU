@@ -38,9 +38,11 @@ namespace Pong
             spriteBatch = new SpriteBatch(GraphicsDevice);
             ClassicPong gameWorld = new ClassicPong();
             GameOverMenu gameoverMenu = new GameOverMenu();
+            Menu menu = new Menu();
             gamestates.AddState("classic", gameWorld);
             gamestates.AddState("gameover", gameoverMenu);
-            gamestates.SetStartingState("gameover");
+            gamestates.AddState("menu", menu);
+            gamestates.SetStartingState("menu");
         }
         
         protected override void UnloadContent() { }

@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Audio;
 using Pong.Core;
+using Pong.States;
 
 namespace Pong
 {
@@ -13,8 +14,9 @@ namespace Pong
     {
         private Color[] colours;
         private int currentCol = 0;
-        private Ball ball;
+        private Ball ball, extraBall;
         private Paddle paddle0, paddle1;
+        private MODE mode;
 
         public Colourizer()
         {
@@ -30,7 +32,10 @@ namespace Pong
 
         public override void Init()
         {
+            mode = DataManager.GetData<MODE>("mode");
             ball = FindWithTag("ball") as Ball;
+            if (mode == MODE.multiball)
+                extraBall = FindWithTag("extraball") as Ball;
             GameObject[] paddles = FindAllWithTag("paddle");
             paddle0 = paddles[0] as Paddle;
             paddle1 = paddles[1] as Paddle;
@@ -58,6 +63,8 @@ namespace Pong
             if (currentCol > colours.Length - 1)
                 currentCol = 0;
             ball.Colour = colours[currentCol];
+            if (mode == MODE.multiball)
+                extraBall.Colour = colours[currentCol];
             paddle0.Colour = colours[currentCol];
             paddle1.Colour = colours[currentCol];
         }

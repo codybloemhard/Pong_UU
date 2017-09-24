@@ -12,10 +12,12 @@ namespace Pong.States
     public class ClassicPong : GameState
     {
         private GameObject.GameObjectManager objects;
-        private Ball ball;
+        private Ball ball, extraball;
         private Paddle paddle0, paddle1;
         private Song song;
         private Colourizer colours;
+        private UITextureElement[] livesUI;
+        private int maxlives = 0;
 
         public ClassicPong() { }
 
@@ -27,12 +29,26 @@ namespace Pong.States
             paddle0 = new Paddle(0, Keys.W, Keys.S);
             paddle1 = new Paddle(1, Keys.Up, Keys.Down);
             colours = new Colourizer();
+            if (DataManager.GetData<MODE>("mode") == MODE.multiball)
+            {
+                extraball = new Ball();
+                extraball.tag = "extraball";
+                objects.Add(extraball);
+            }
             objects.Add(ball);
             objects.Add(paddle0);
             objects.Add(paddle1);
             objects.Add(colours);
             //Init the manager before we play
             objects.Init();
+            //init ui elements
+            maxlives = paddle0.Lives;
+            livesUI = new UITextureElement[maxlives * 2];
+            float livesSize = 0.25f;
+            for (int i = 0; i < maxlives; i++) {
+                livesUI[i] = new UITextureElement("ball", new Vector2(i * livesSize, 0), new Vector2(livesSize, livesSize));
+                livesUI[i + maxlives] = new UITextureElement("ball", new Vector2(16 - livesSize - i * livesSize, 0), new Vector2(livesSize, livesSize));
+            }
             //load the music
             song = AssetManager.GetResource<Song>("music");
             PlaySong();
@@ -49,20 +65,22 @@ namespace Pong.States
             objects.Update(gameTime);
         }
 
-        public void Draw(GameTime gameTime, SpriteBatch spriteBatch, GraphicsDevice device)
+        public void Draw(GameTime time, SpriteBatch batch, GraphicsDevice device)
         {
             device.Clear(Color.Black);
-            spriteBatch.Begin();
+            batch.Begin();
 
-            objects.Draw(gameTime, spriteBatch);
+            objects.Draw(time, batch);
 
             Color uiLivesColour = colours.PeekNextColour();
-            for (int i = 0; i < paddle0.Lives; i++)
-                spriteBatch.Draw(ball.Sprite, new Vector2(i * ball.Sprite.Width, 0), uiLivesColour);
-            for (int i = 0; i < paddle1.Lives; i++)
-                spriteBatch.Draw(ball.Sprite, new Vector2(Grid.ScreenSize.X - (i + 1) * ball.Sprite.Width, 0), uiLivesColour);
-
-            spriteBatch.End();
+            for(int i = 0; i < maxlives * 2; i++)
+            {
+                if (i > paddle0.Lives - 1 && i < maxlives) continue;
+                if (i > maxlives - 1 + paddle1.Lives && i > maxlives - 1) continue;
+                livesUI[i].colour = uiLivesColour;
+                livesUI[i].Draw(batch);
+            }
+            batch.End();
         }
         
         //method to play the music

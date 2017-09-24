@@ -39,7 +39,7 @@ namespace Pong.Core
 
         private bool dirtybounds = true, dirtydrawscale = true;
         private Vector2 pos, size, sizemul;
-        protected string tag = "";
+        public string tag = "";
         protected GameObjectManager manager;
         protected Texture2D sprite;
         protected Bounds bounds;
