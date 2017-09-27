@@ -22,11 +22,11 @@ namespace Pong
         {
             colours = new Color[6];
             colours[0] = Color.Red;
-            colours[1] = Lerp(0.5f, new Color(255, 0, 0), new Color(0, 255, 0));
+            colours[1] = Lerp(0.5f, new Color(255, 0, 0, 255), new Color(0, 255, 0, 255));
             colours[2] = Color.Green;
-            colours[3] = Lerp(0.5f, new Color(0, 255, 0), new Color(0, 0, 255));
+            colours[3] = Lerp(0.5f, new Color(0, 255, 0, 255), new Color(0, 0, 255, 255));
             colours[4] = Color.Blue;
-            colours[5] = Lerp(0.5f, new Color(0, 0, 255), new Color(255, 0, 0));
+            colours[5] = Lerp(0.5f, new Color(0, 0, 255, 255), new Color(255, 0, 0, 255));
             tag = "colourizer";
         }
 

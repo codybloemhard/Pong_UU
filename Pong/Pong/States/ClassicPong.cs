@@ -18,6 +18,7 @@ namespace Pong.States
         private Colourizer colours;
         private UITextureElement[] livesUI;
         private int maxlives = 0;
+        private ParticleEmitter particles;
 
         public ClassicPong() { }
 
@@ -49,6 +50,7 @@ namespace Pong.States
                 livesUI[i] = new UITextureElement("ball", new Vector2(i * livesSize, 0), new Vector2(livesSize, livesSize));
                 livesUI[i + maxlives] = new UITextureElement("ball", new Vector2(16 - livesSize - i * livesSize, 0), new Vector2(livesSize, livesSize));
             }
+            particles = new ParticleEmitter("ball", 500);
             //load the music
             song = AssetManager.GetResource<Song>("music");
             PlaySong();
@@ -63,6 +65,10 @@ namespace Pong.States
         public void Update(GameTime gameTime)
         {
             objects.Update(gameTime);
+            Vector2 rdir = new Vector2((float)Pong.Random.NextDouble()-0.5f, (float)Pong.Random.NextDouble()-0.5f);
+            Vector2 ppos = ball.Pos + ball.Size * 0.5f - new Vector2(0.05f, 0.05f);
+            particles.Emit(ppos, new Vector2(0.1f, 0.1f), rdir, colours.GetColour(), 0.01f, 60, 0.95f, 1.05f, 2);
+            particles.Update();
         }
 
         public void Draw(GameTime time, SpriteBatch batch, GraphicsDevice device)
@@ -70,6 +76,7 @@ namespace Pong.States
             device.Clear(Color.Black);
             batch.Begin();
 
+            particles.Draw(batch);
             objects.Draw(time, batch);
 
             Color uiLivesColour = colours.PeekNextColour();
@@ -80,6 +87,7 @@ namespace Pong.States
                 livesUI[i].colour = uiLivesColour;
                 livesUI[i].Draw(batch);
             }
+            
             batch.End();
         }
         

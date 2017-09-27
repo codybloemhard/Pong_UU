@@ -20,7 +20,7 @@ namespace Pong.States
         public void Load()
         {
             message = "Player " + DataManager.GetData<int>("loser") + " lost!";
-            text = new Text(message, Vector2.Zero, Grid.ScreenSize);
+            text = new Text(message, Vector2.Zero, Grid.GridSize);
             text.colour = Color.White;
             mainFont = AssetManager.GetResource<SpriteFont>("mainFont");
             replayButton = new Button("Play again!", "button", () => { loadGame(); }, new Vector2(2,5), new Vector2(4, 2));
@@ -53,9 +53,9 @@ namespace Pong.States
         {
             device.Clear(Color.Black);
             batch.Begin();
-            text.Draw(batch, mainFont);
             replayButton.Draw(batch, mainFont);
             menuButton.Draw(batch, mainFont);
+            text.Draw(batch, mainFont);
             batch.End();
         }
     }
