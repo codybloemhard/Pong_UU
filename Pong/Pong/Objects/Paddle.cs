@@ -45,7 +45,7 @@ namespace Pong
         {
             ball = FindWithTag("ball") as Ball;
             colours = FindWithTag("colourizer") as Colourizer;
-            colour = colours.GetColour();
+            colour = colours.Colour;
             if (mode == MODE.multiball)
                 extraBall = FindWithTag("extraball") as Ball;
         }

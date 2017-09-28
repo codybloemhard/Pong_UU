@@ -19,6 +19,7 @@ namespace Pong.States
         private UITextureElement[] livesUI;
         private int maxlives = 0;
         private ParticleEmitter particles;
+        private MODE mode;
 
         public ClassicPong() { }
 
@@ -30,7 +31,8 @@ namespace Pong.States
             paddle0 = new Paddle(0, Keys.W, Keys.S);
             paddle1 = new Paddle(1, Keys.Up, Keys.Down);
             colours = new Colourizer();
-            if (DataManager.GetData<MODE>("mode") == MODE.multiball)
+            mode = DataManager.GetData<MODE>("mode");
+            if (mode == MODE.multiball)
             {
                 extraball = new Ball();
                 extraball.tag = "extraball";
@@ -65,15 +67,22 @@ namespace Pong.States
         public void Update(GameTime gameTime)
         {
             objects.Update(gameTime);
-            Vector2 rdir = new Vector2((float)Pong.Random.NextDouble()-0.5f, (float)Pong.Random.NextDouble()-0.5f);
-            Vector2 ppos = ball.Pos + ball.Size * 0.5f - new Vector2(0.05f, 0.05f);
-            particles.Emit(ppos, new Vector2(0.1f, 0.1f), rdir, colours.GetColour(), 0.01f, 60, 0.95f, 1.05f, 2);
+            emitBallParticles(ball);
+            if (mode == MODE.multiball)
+                emitBallParticles(extraball);
             particles.Update();
+        }
+
+        private void emitBallParticles(GameObject o)
+        {
+            Vector2 rdir = new Vector2((float)Pong.Random.NextDouble() - 0.5f, (float)Pong.Random.NextDouble() - 0.5f);
+            Vector2 ppos = o.Pos + o.Size * 0.5f - new Vector2(0.05f, 0.05f);
+            particles.Emit(ppos, new Vector2(0.1f, 0.1f), rdir, colours.Colour, 0.01f, 60, 0.95f, 1.05f, 2);
         }
 
         public void Draw(GameTime time, SpriteBatch batch, GraphicsDevice device)
         {
-            device.Clear(Color.Black);
+            device.Clear(colours.BackColour);
             batch.Begin();
 
             particles.Draw(batch);
@@ -91,7 +100,6 @@ namespace Pong.States
             batch.End();
         }
         
-        //method to play the music
         public void PlaySong()
         {
             MediaPlayer.Play(song);

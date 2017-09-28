@@ -20,13 +20,13 @@ namespace Pong.States
         public void Load()
         {
             message = "Player " + DataManager.GetData<int>("loser") + " lost!";
-            text = new Text(message, Vector2.Zero, Grid.GridSize);
+            text = new Text(message, Vector2.Zero, new Vector2(16, 5));
             text.colour = Color.White;
             mainFont = AssetManager.GetResource<SpriteFont>("mainFont");
             replayButton = new Button("Play again!", "button", () => { loadGame(); }, new Vector2(2,5), new Vector2(4, 2));
-            replayButton.SetupColours(new Color(64, 64, 64), new Color(96, 96, 96), new Color(32, 32, 32), Color.Red);
+            replayButton.SetupColours(Color.Yellow, new Color(96, 96, 96), new Color(32, 32, 32), Color.Red);
             menuButton = new Button("Go to menu!", "button", () => { loadMenu(); }, new Vector2(10, 5), new Vector2(4, 2));
-            menuButton.SetupColours(new Color(64, 64, 64), new Color(96, 96, 96), new Color(32, 32, 32), Color.Red);
+            menuButton.SetupColours(Color.Purple, new Color(96, 96, 96), new Color(32, 32, 32), Color.Red);
         }
 
         private void loadGame()

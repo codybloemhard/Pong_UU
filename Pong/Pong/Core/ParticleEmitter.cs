@@ -74,7 +74,7 @@ namespace Pong.Core
                 Spawn(particles[index + i]);
             index += rate;
         }
-
+        
         public void Update()
         {
             for (int i = 0; i < size; i++)

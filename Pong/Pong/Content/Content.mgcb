@@ -97,3 +97,9 @@
 /processorParam:TextureFormat=Color
 /build:button.png
 
+#begin menuFont.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:TextureFormat=Compressed
+/build:menuFont.spritefont
+

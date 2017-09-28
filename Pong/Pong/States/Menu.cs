@@ -12,14 +12,13 @@ namespace Pong.States
     {
         classic,
         multiball,
-        extraplayer,
         ai
     }
     public class Menu : GameState
     {
-        private SpriteFont mainFont;
+        private SpriteFont mainFont, titleFont;
         private Text text;
-        private Button classicButton, multiballButton, extraplayerButton, aiButton;
+        private Button classicButton, multiballButton, aiButton;
         private string message = "";
 
         public Menu() { }
@@ -27,17 +26,16 @@ namespace Pong.States
         public void Load()
         {
             message = "ZIEK HARDE PONG BOYZ";
-            text = new Text(message, Vector2.Zero, new Vector2(16, 3));
+            text = new Text(message, Vector2.Zero, new Vector2(16, 4));
             text.colour = Color.White;
             mainFont = AssetManager.GetResource<SpriteFont>("mainFont");
-            classicButton = new Button("Classic Pong", "button", () => { loadClassic(); }, new Vector2(0, 3), new Vector2(8, 3));
-            classicButton.SetupColours(new Color(64, 64, 64), new Color(96, 96, 96), new Color(32, 32, 32), Color.Red);
-            multiballButton = new Button("Multiball Pong", "button", () => { loadMultiball(); }, new Vector2(8, 3), new Vector2(8, 3));
-            multiballButton.SetupColours(new Color(64, 64, 64), new Color(96, 96, 96), new Color(32, 32, 32), Color.Red);
-            extraplayerButton = new Button("Extra players Pong", "button", () => { loadExtra(); }, new Vector2(0, 6), new Vector2(8, 3));
-            extraplayerButton.SetupColours(new Color(64, 64, 64), new Color(96, 96, 96), new Color(32, 32, 32), Color.Red);
-            aiButton = new Button("vs AI Pong", "button", () => { loadAI(); }, new Vector2(8, 6), new Vector2(8, 3));
-            aiButton.SetupColours(new Color(64, 64, 64), new Color(96, 96, 96), new Color(32, 32, 32), Color.Red);
+            titleFont = AssetManager.GetResource<SpriteFont>("menuFont");
+            classicButton = new Button("Classic Pong", "button", () => { loadClassic(); }, new Vector2(1, 4), new Vector2(4, 3));
+            classicButton.SetupColours(Color.Red, new Color(96, 96, 96), new Color(32, 32, 32), Color.Red);
+            multiballButton = new Button("Multiball Pong", "button", () => { loadMultiball(); }, new Vector2(6, 4), new Vector2(4, 3));
+            multiballButton.SetupColours(new Color(0, 255, 0), new Color(96, 96, 96), new Color(32, 32, 32), Color.Red);
+            aiButton = new Button("vs AI Pong", "button", () => { loadAI(); }, new Vector2(11, 4), new Vector2(4, 3));
+            aiButton.SetupColours(Color.Blue, new Color(96, 96, 96), new Color(32, 32, 32), Color.Red);
         }
 
         private void loadClassic()
@@ -49,11 +47,6 @@ namespace Pong.States
         {
             DataManager.SetData<MODE>("mode", MODE.multiball);
             GameStateManager.RequestChange(new GameStateChange("classic", CHANGETYPE.LOAD));
-        }
-        private void loadExtra()
-        {
-            DataManager.SetData<MODE>("mode", MODE.extraplayer);
-            GameStateManager.RequestChange(new GameStateChange("extra", CHANGETYPE.LOAD));
         }
         private void loadAI()
         {
@@ -70,7 +63,6 @@ namespace Pong.States
         {
             classicButton.Update();
             multiballButton.Update();
-            extraplayerButton.Update();
             aiButton.Update();
         }
 
@@ -78,10 +70,9 @@ namespace Pong.States
         {
             device.Clear(Color.Black);
             batch.Begin();
-            text.Draw(batch, mainFont);
+            text.Draw(batch, titleFont);
             classicButton.Draw(batch, mainFont);
             multiballButton.Draw(batch, mainFont);
-            extraplayerButton.Draw(batch, mainFont);
             aiButton.Draw(batch, mainFont);
             batch.End();
         }

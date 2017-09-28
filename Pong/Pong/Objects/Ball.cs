@@ -32,7 +32,8 @@ namespace Pong
             speed *= 0.1f;
             if (colours == null)
                 colours = FindWithTag("colourizer") as Colourizer;
-            colour = colours.GetColour();
+            colours.LiveOff();
+            colour = colours.Colour;
         }
 
         public override void Update(GameTime gameTime)
