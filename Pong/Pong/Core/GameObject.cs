@@ -35,6 +35,9 @@ namespace Pong.Core
     
     public abstract partial class GameObject
     {
+        /*zodat manager zich zelf can registreren,
+        maar dat niet mogelijk is van buitenaf door andere objecten.
+        */
         public partial class GameObjectManager { }
 
         private bool dirtybounds = true, dirtydrawscale = true;

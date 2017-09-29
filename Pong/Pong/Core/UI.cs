@@ -88,7 +88,7 @@ namespace Pong.Core
 
     public class Button : UITextureElement
     {
-        protected Color baseColour, highlightColour, downColour, textColour;
+        public Color baseColour, highlightColour, downColour, textColour;
         protected string text;
         protected Bounds bounds;
         protected Action pressAction;

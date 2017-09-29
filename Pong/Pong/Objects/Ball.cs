@@ -29,19 +29,19 @@ namespace Pong
             float yspeed = (float)Pong.Random.NextDouble() * 2 - 1;
             speed = new Vector2(xspeed, yspeed);
             speed.Normalize();
-            speed *= 0.1f;
+            speed *= 5.0f;
             if (colours == null)
                 colours = FindWithTag("colourizer") as Colourizer;
             colours.LiveOff();
             colour = colours.Colour;
         }
 
-        public override void Update(GameTime gameTime)
+        public override void Update(GameTime time)
         {
             float dx, dy;
 
-            dx = Pos.X + speed.X;
-            dy = Pos.Y + speed.Y;
+            dx = Pos.X + speed.X * (float)time.ElapsedGameTime.TotalSeconds;
+            dy = Pos.Y + speed.Y * (float)time.ElapsedGameTime.TotalSeconds;
 
             if (dy + Size.Y > Grid.GridSize.Y)
             {

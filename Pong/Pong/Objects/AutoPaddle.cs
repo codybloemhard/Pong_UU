@@ -11,19 +11,20 @@ using Pong.States;
 
 namespace Pong
 {
-    public class Paddle : GameObject
+    public class AutoPaddle : GameObject
     {
         private float speed;
         private int player, lives;
-        private Keys keyUp, keyDown;
         private SoundEffect effect1, effect2;
         private Ball ball, extraBall;
         private Colourizer colours;
         private MODE mode;
+        private bool calculated = false;
+        private float futureY = 0.0f;
 
-        public Paddle(int player, Keys keyUp, Keys keyDown)
+        public AutoPaddle(int player)
         {
-            tag = "paddle";
+            tag = "autopaddle";
             mode = DataManager.GetData<MODE>("mode");
             effect1 = AssetManager.GetResource<SoundEffect>("paddlebounce");
             effect2 = AssetManager.GetResource<SoundEffect>("minuslife");
@@ -35,8 +36,6 @@ namespace Pong
                 Pos = new Vector2(0, (Grid.GridSize.Y - Size.Y) / 2f);
             else if (player == 1)
                 Pos = new Vector2((Grid.GridSize.X - Size.X), (Grid.GridSize.Y - Size.Y) / 2f);
-            this.keyUp = keyUp;
-            this.keyDown = keyDown;
             speed = 0.15f;
             if (mode != MODE.multiball) lives = 3;
             else lives = 10;
@@ -65,14 +64,60 @@ namespace Pong
 
         public override void Update(GameTime gameTime)
         {
-            if (Keyboard.GetState().IsKeyDown(keyUp) && Pos.Y > 0)
-                Pos -= Vector2.UnitY * speed;
-            if (Keyboard.GetState().IsKeyDown(keyDown) && Pos.Y < Grid.GridSize.Y - Size.Y)
-                Pos += Vector2.UnitY * speed;
-
             HandleBall(ball);
             if (mode == MODE.multiball)
+            {
                 HandleBall(extraBall);
+            }
+
+            bool recieving = ball.Speed.X > 0;
+            if (!recieving)
+            {
+                float deltay = (Grid.GridSize.Y / 2) - Pos.X + Size.X;
+                if(deltay > 0)
+                    deltay = MathHelper.Clamp(deltay, 0, speed);
+                else
+                    deltay = MathHelper.Clamp(deltay, -speed, 0);
+                Pos += Vector2.UnitY * deltay;
+                calculated = false;
+            }
+            else
+            {
+                if (!calculated)
+                {
+                    futureY = CalcY(ball.Speed, ball.Pos);
+                    Console.WriteLine(futureY);
+                    calculated = true;
+                }
+                if (Pos.Y < futureY)
+                    Pos += Vector2.UnitY * MathHelper.Clamp(futureY - Pos.Y, 0, speed);
+                else
+                    Pos -= Vector2.UnitY * MathHelper.Clamp(Pos.Y - futureY, 0, speed);
+            }
+        }
+
+        private float CalcY(Vector2 bdir, Vector2 bpos)
+        {
+            bdir.Normalize();
+            //float mult = 1.0f / bdir.X;
+            //bdir *= mult;
+            float xtogo = Grid.GridSize.X - bpos.X;
+            float ytogo;
+            if (bdir.Y > 0)
+                ytogo = Grid.GridSize.Y - bpos.Y;
+            else
+                ytogo = bpos.Y;
+            if (xtogo < ytogo)
+                return xtogo * bdir.Y;
+            Vector2 newbdir = bdir;
+            newbdir.Y *= -1;
+            float newby;
+            if (bdir.Y > 0)
+                newby = Grid.GridSize.Y;
+            else
+                newby = 0;
+            Vector2 newbpos = new Vector2(ytogo * bdir.X, newby);
+            return CalcY(newbdir, newbpos);
         }
 
         private void HandleBall(Ball b)

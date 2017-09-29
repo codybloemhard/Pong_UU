@@ -14,6 +14,7 @@ namespace Pong.States
         private GameObject.GameObjectManager objects;
         private Ball ball, extraball;
         private Paddle paddle0, paddle1;
+        private AutoPaddle autoPaddle;
         private Song song;
         private Colourizer colours;
         private UITextureElement[] livesUI;
@@ -29,7 +30,7 @@ namespace Pong.States
             //Construct all objects and add them
             ball = new Ball();
             paddle0 = new Paddle(0, Keys.W, Keys.S);
-            paddle1 = new Paddle(1, Keys.Up, Keys.Down);
+            
             colours = new Colourizer();
             mode = DataManager.GetData<MODE>("mode");
             if (mode == MODE.multiball)
@@ -38,9 +39,18 @@ namespace Pong.States
                 extraball.tag = "extraball";
                 objects.Add(extraball);
             }
+            if(mode == MODE.ai)
+            {
+                autoPaddle = new AutoPaddle(1);
+                objects.Add(autoPaddle);
+            }
+            else
+            {
+                paddle1 = new Paddle(1, Keys.Up, Keys.Down);
+                objects.Add(paddle1);
+            }
             objects.Add(ball);
             objects.Add(paddle0);
-            objects.Add(paddle1);
             objects.Add(colours);
             //Init the manager before we play
             objects.Init();
@@ -89,10 +99,13 @@ namespace Pong.States
             objects.Draw(time, batch);
 
             Color uiLivesColour = colours.PeekNextColour();
-            for(int i = 0; i < maxlives * 2; i++)
+            int player2lives = 0;
+            if (mode != MODE.ai) player2lives = paddle1.Lives;
+            else player2lives = autoPaddle.Lives;
+            for (int i = 0; i < maxlives * 2; i++)
             {
                 if (i > paddle0.Lives - 1 && i < maxlives) continue;
-                if (i > maxlives - 1 + paddle1.Lives && i > maxlives - 1) continue;
+                if (i > maxlives - 1 + player2lives && i > maxlives - 1) continue;
                 livesUI[i].colour = uiLivesColour;
                 livesUI[i].Draw(batch);
             }

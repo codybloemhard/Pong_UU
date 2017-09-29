@@ -103,3 +103,9 @@
 /processorParam:TextureFormat=Compressed
 /build:menuFont.spritefont
 
+#begin smallFont.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:TextureFormat=Compressed
+/build:smallFont.spritefont
+

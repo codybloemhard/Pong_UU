@@ -12,31 +12,32 @@ namespace Pong
 {
     public class Colourizer : GameObject
     {
-        private Color[] colours;
+        private static Color[] colours;
+        private static List<float> blendIndices;
         private Color backColour;
         private int currentCol = 0;
         private Ball ball, extraBall;
-        private Paddle paddle0, paddle1;
+        private GameObject paddle0, paddle1;
         private MODE mode;
         
-        public Colourizer()
+        static Colourizer()
         {
             colours = new Color[12];
-            backColour = Color.Black;
-
             colours[0] = new Color(255, 0, 0);
             colours[2] = new Color(255, 255, 0);
             colours[4] = new Color(0, 255, 0);
             colours[6] = new Color(0, 255, 255);
             colours[8] = new Color(0, 0, 255);
             colours[10] = new Color(255, 0, 255);
+            blendIndices = new List<float>();
+        }
 
-            for(int i = 0; i < 5; i++)
-            {
+        public Colourizer()
+        {
+            backColour = Color.Black;
+            for (int i = 0; i < 5; i++)
                 colours[i * 2 + 1] = Lerp(0.5f, colours[i * 2], colours[i * 2 + 2]);
-            }
             colours[11] = Lerp(0.5f, colours[10], colours[0]);
-
             tag = "colourizer";
         }
 
@@ -46,9 +47,17 @@ namespace Pong
             ball = FindWithTag("ball") as Ball;
             if (mode == MODE.multiball)
                 extraBall = FindWithTag("extraball") as Ball;
-            GameObject[] paddles = FindAllWithTag("paddle");
-            paddle0 = paddles[0] as Paddle;
-            paddle1 = paddles[1] as Paddle;
+            if(mode != MODE.ai)
+            {
+                GameObject[] paddles = FindAllWithTag("paddle");
+                paddle0 = paddles[0];
+                paddle1 = paddles[1];
+            }
+            else
+            {
+                paddle0 = FindWithTag("paddle");
+                paddle1 = FindWithTag("autopaddle");
+            }
         }
 
         public override void Update(GameTime gameTime)
@@ -63,7 +72,7 @@ namespace Pong
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch) { }
-
+        //fancy
         new public Color Colour
         {
             get { return colours[currentCol]; }
@@ -84,7 +93,7 @@ namespace Pong
                 index = 0;
             return colours[index];
         }
-
+        //cycle to the next colour
         public void NextColour()
         {
             currentCol++;
@@ -96,8 +105,28 @@ namespace Pong
             paddle0.Colour = colours[currentCol];
             paddle1.Colour = colours[currentCol];
         }
+        /*returns a continues stream of colors LERPed from the basic colours
+        and at a specified speed with offset, multiple channels or streams possible.*/
+        public static Color ContinuesColourBlend(int channel, float rate, float offset)
+        {
+            if (channel >= blendIndices.Count)
+                blendIndices.Add(rate);
+            int blendIndex = channel;
+            blendIndices[blendIndex] += rate;
+            if (blendIndices[blendIndex] >= 1.0f)
+                blendIndices[blendIndex] = 0.0f;
+            float localIndex = blendIndices[blendIndex] + offset;
+            if (localIndex >= 1.0f) localIndex = localIndex - ((int)localIndex);
+            int left = (int)(localIndex * 12);
+            int right = left + 1;
+            if (right > 11)
+                right = 0;
+            float difference = (localIndex * 12) - left;
+            Color c = Lerp(difference, colours[left], colours[right]);
+            return c;
+        }
         //LERP = Linear Interpolation
-        public Color Lerp(float t, Color a, Color b)
+        public static Color Lerp(float t, Color a, Color b)
         {
             a.R = Lerp(t, a.R, b.R);
             a.G = Lerp(t, a.G, b.G);
@@ -107,7 +136,7 @@ namespace Pong
             return col;
         }
         //LERP = Linear Interpolation
-        public byte Lerp(float t, byte a, byte b)
+        public static byte Lerp(float t, byte a, byte b)
         {
             return (byte)(a + t * (b - a));
         }
