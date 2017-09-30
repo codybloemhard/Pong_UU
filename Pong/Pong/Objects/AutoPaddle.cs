@@ -73,51 +73,62 @@ namespace Pong
             bool recieving = ball.Speed.X > 0;
             if (!recieving)
             {
-                float deltay = (Grid.GridSize.Y / 2) - Pos.X + Size.X;
-                if(deltay > 0)
-                    deltay = MathHelper.Clamp(deltay, 0, speed);
+                float middle = (Grid.GridSize.Y / 2.0f) - (Size.Y / 2.0f);
+                if (Pos.Y < middle)
+                    Pos += Vector2.UnitY * MathHelper.Clamp(middle - Pos.Y, 0, speed);
                 else
-                    deltay = MathHelper.Clamp(deltay, -speed, 0);
-                Pos += Vector2.UnitY * deltay;
+                    Pos -= Vector2.UnitY * MathHelper.Clamp(Pos.Y - middle, 0, speed);
                 calculated = false;
             }
             else
             {
                 if (!calculated)
                 {
-                    futureY = CalcY(ball.Speed, ball.Pos);
-                    Console.WriteLine(futureY);
+                    futureY = CalcY(ball.Speed, ball.Pos, 0);
+                    futureY -= Size.Y / 2.0f;
                     calculated = true;
                 }
                 if (Pos.Y < futureY)
                     Pos += Vector2.UnitY * MathHelper.Clamp(futureY - Pos.Y, 0, speed);
                 else
                     Pos -= Vector2.UnitY * MathHelper.Clamp(Pos.Y - futureY, 0, speed);
+                Pos = new Vector2(Pos.X, MathHelper.Clamp(Pos.Y, 0, Grid.GridSize.Y - Size.Y));
             }
         }
 
-        private float CalcY(Vector2 bdir, Vector2 bpos)
+        private float CalcY(Vector2 bdir, Vector2 bpos, int i)
         {
+            if (i > 20) return 0.0f;//tegen stackoverflows
             bdir.Normalize();
-            //float mult = 1.0f / bdir.X;
-            //bdir *= mult;
-            float xtogo = Grid.GridSize.X - bpos.X;
-            float ytogo;
-            if (bdir.Y > 0)
-                ytogo = Grid.GridSize.Y - bpos.Y;
+            float mult = 1.0f / bdir.X;
+            bdir *= mult;
+            bool up = bdir.Y < 0;
+            float m = bdir.Y;
+            float xtg = Grid.GridSize.X - bpos.X;
+            float ytg = 0;
+            if (up)
+                ytg = bpos.Y;
             else
-                ytogo = bpos.Y;
-            if (xtogo < ytogo)
-                return xtogo * bdir.Y;
+                ytg = Grid.GridSize.Y - bpos.Y;
+            if (ytg / Math.Abs(m) > xtg)
+            {
+                return (xtg *m) + bpos.Y;
+            }
+            float newpx, newpy;
+            if (up)
+            {
+                newpy = 0.0f;
+                newpx = bpos.X + (ytg / -bdir.Y);
+            }
+            else
+            {
+                newpy = Grid.GridSize.Y;
+                newpx = bpos.X + (ytg / bdir.Y);
+            }
             Vector2 newbdir = bdir;
             newbdir.Y *= -1;
-            float newby;
-            if (bdir.Y > 0)
-                newby = Grid.GridSize.Y;
-            else
-                newby = 0;
-            Vector2 newbpos = new Vector2(ytogo * bdir.X, newby);
-            return CalcY(newbdir, newbpos);
+            Vector2 newbpos = new Vector2(newpx, newpy);
+            return CalcY(newbdir, newbpos, i + 1);
         }
 
         private void HandleBall(Ball b)

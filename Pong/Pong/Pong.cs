@@ -19,6 +19,7 @@ namespace Pong
         public Pong()
         {
             graphics = new GraphicsDeviceManager(this);
+            //setup worldspace to abstract from screenspace
             Grid.Setup(16, 9, 1600, 900);
             graphics.PreferredBackBufferWidth = (int)Grid.ScreenSize.X;
             graphics.PreferredBackBufferHeight = (int)Grid.ScreenSize.Y;
@@ -36,6 +37,7 @@ namespace Pong
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            //setup alle gamestates
             ClassicPong gameWorld = new ClassicPong();
             GameOverMenu gameoverMenu = new GameOverMenu();
             Menu menu = new Menu();
@@ -57,7 +59,7 @@ namespace Pong
             }
             gamestates.Update(gameTime);
         }
-        
+
         protected override void Draw(GameTime gameTime)
         {
             gamestates.Draw(gameTime, spriteBatch, GraphicsDevice);

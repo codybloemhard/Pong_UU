@@ -59,7 +59,7 @@ namespace Pong
                 paddle1 = FindWithTag("autopaddle");
             }
         }
-
+        
         public override void Update(GameTime gameTime)
         {
             int rate = 12;
