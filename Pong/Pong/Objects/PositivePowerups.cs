@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Pong.Core;
-
+//niet in gebruik op het moment, bevat oude code!
 namespace Pong
 {
     public class Powerups : GameObject

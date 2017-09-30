@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-
+//Simpele GameStateManager, spreekt voorzich.
 namespace Pong.Core
 {
     public interface GameState

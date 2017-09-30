@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Media;
 using Pong.Core;
 using Pong.States;
-
+//Een NPC die optimaal speelt.
 namespace Pong
 {
     public class AutoPaddle : GameObject
@@ -21,6 +21,7 @@ namespace Pong
         private MODE mode;
         private bool calculated = false;
         private float futureY = 0.0f;
+        private int score;
 
         public AutoPaddle(int player)
         {
@@ -46,8 +47,7 @@ namespace Pong
             ball = FindWithTag("ball") as Ball;
             colours = FindWithTag("colourizer") as Colourizer;
             colour = colours.Colour;
-            if (mode == MODE.multiball)
-                extraBall = FindWithTag("extraball") as Ball;
+            score = 0;
         }
 
         private void LoseLife()
@@ -69,7 +69,10 @@ namespace Pong
             {
                 HandleBall(extraBall);
             }
-
+            /*Als receiving == true dan komt de bal op de autopaddle af
+            Dan berekenen waar de paddle heen moet gaan. Als de bal richting
+            de speler gaat dan gaat de autopaddle naar het midden van het scherm.
+            */
             bool recieving = ball.Speed.X > 0;
             if (!recieving)
             {
@@ -95,7 +98,9 @@ namespace Pong
                 Pos = new Vector2(Pos.X, MathHelper.Clamp(Pos.Y, 0, Grid.GridSize.Y - Size.Y));
             }
         }
-
+        /*hier rekenen we uit waar de bal terecht gaat komen,
+        inclusief reflecties. De autoPaddle speelt het spel dus
+        optimaal :)*/
         private float CalcY(Vector2 bdir, Vector2 bpos, int i)
         {
             if (i > 20) return 0.0f;//tegen stackoverflows
@@ -154,6 +159,8 @@ namespace Pong
 
                 effect1.Play(0.2f, 0.0f, 0.0f);
                 colours.NextColour();
+                score++;
+                DataManager.SetData<int>("score", score);
             }
             //als de bal buiten het scherm is, reset etc.
             bool loselife = false;

@@ -69,6 +69,7 @@ namespace Pong.Core
                 sizemul = Size * Grid.Scale(new Vector2(sprite.Width, sprite.Height));
                 dirtydrawscale = false;
             }
+            //scale de sprite zodat alles resolutie independed is.
             batch.Draw(sprite, Grid.ToScreenSpace(Pos), null, colour, 0.0f, Vector2.Zero, sizemul, SpriteEffects.None, 0.0f);
         }
 
@@ -85,7 +86,11 @@ namespace Pong.Core
             dirtybounds = false;
             return bounds;
         }
-
+        /*Find with Tag functies zoals in Unity3D, zodat
+        we niet harde links hoeven te leggen tussen objecten.
+        Het zou een zooi worden als we straks een grotere game maken
+        en objecten onderling zouden linken in de main class.
+        */
         public GameObject FindWithTag(string tag)
         {
             return manager.FindWithTag(tag);
@@ -124,21 +129,6 @@ namespace Pong.Core
         {
             get { return colour; }
             set { colour = value; }
-        }
-
-        public void UpdatePos(float x, float y)
-        {
-            pos.X = x;
-            pos.Y = y;
-            dirtybounds = true;
-        }
-
-        public void UpdateSize(float x, float y)
-        {
-            size.X = x;
-            size.Y = y;
-            dirtybounds = true;
-            dirtydrawscale = true;
         }
     }
 }

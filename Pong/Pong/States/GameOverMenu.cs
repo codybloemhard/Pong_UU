@@ -16,10 +16,12 @@ namespace Pong.States
         private string message = ""; 
 
         public GameOverMenu() { }
-
+        //Init alle UI elementen, gebruik lambda's voor de Actions.
         public void Load()
         {
             message = "Player " + DataManager.GetData<int>("loser") + " lost!";
+            if (DataManager.GetData<MODE>("mode") == MODE.ai)
+                message = "The AI won :) You survived " + DataManager.GetData<int>("score") + " attacks!";
             text = new Text(message, Vector2.Zero, new Vector2(16, 5));
             text.colour = Color.White;
             mainFont = AssetManager.GetResource<SpriteFont>("mainFont");

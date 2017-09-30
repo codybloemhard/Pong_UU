@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-
+/*Om te voorkomen dat we met pixels werken, nu werken we in game-space
+Zelf aantegeven dimensies, resolutie independend.*/
 namespace Pong.Core
 {
     public static class Grid

@@ -23,7 +23,7 @@ namespace Pong.States
         private float titleColouroffset, buttonColourOffset;
 
         public Menu() { }
-
+        //Init alle UI elementen.
         public void Load()
         {
             smallFont = AssetManager.GetResource<SpriteFont>("smallFont");
@@ -41,7 +41,7 @@ namespace Pong.States
             titleColouroffset = (float)Pong.Random.NextDouble();
             buttonColourOffset = (float)Pong.Random.NextDouble();
         }
-
+        //Deze functies worden mee gegeven aan de buttons
         private void loadClassic()
         {
             DataManager.SetData<MODE>("mode", MODE.classic);

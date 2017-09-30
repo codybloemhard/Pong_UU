@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-
+//Om GameObjects te updaten en te drawen.
 namespace Pong.Core
 {
     public abstract partial class GameObject
@@ -38,6 +38,7 @@ namespace Pong.Core
 
             public void Add(GameObject o)
             {
+                //dit kan omdat deze class defined is in de GameObject class
                 o.manager = this;
                 objects.Add(o);
             }
@@ -51,7 +52,8 @@ namespace Pong.Core
             {
                 objects.Clear();
             }
-
+            /*Achterlichende functies for FindWithTag etc.
+            Zie GameObject waarom.*/
             public GameObject FindWithTag(string tag)
             {
                 for(int i = 0; i < Size; i++)

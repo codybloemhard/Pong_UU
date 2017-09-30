@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+//Een Dictionary waarin je elk type in kan opbergen :)
 namespace Pong.Core
 {
     public interface _item { }

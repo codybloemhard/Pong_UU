@@ -24,6 +24,7 @@ namespace Pong
 
         public override void Init()
         {
+            //random direction etc.
             Pos = new Vector2((Grid.GridSize.X - Size.X) / 2f, (Grid.GridSize.Y - Size.Y) / 2f);
             float xspeed = Pong.Random.NextDouble() <= 0.5f ? 1f : -1f;
             float yspeed = (float)Pong.Random.NextDouble() * 2 - 1;

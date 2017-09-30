@@ -5,7 +5,9 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
-
+/*Deze deelt pointers uit en laad pas als de asset nooit eerder
+is opgevraagd.
+*/
 namespace Pong.Core
 {
     public static class AssetManager

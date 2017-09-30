@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Audio;
 using Pong.Core;
 using Pong.States;
-
+//Deze class regelt alle fancy kleur overgangen die in de game te zien zijn.
 namespace Pong
 {
     public class Colourizer : GameObject

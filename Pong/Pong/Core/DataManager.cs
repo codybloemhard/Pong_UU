@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
+//DataManager is er om data tussen gamestates te delen.
 namespace Pong.Core
 {
     public static class DataManager

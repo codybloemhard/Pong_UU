@@ -1,7 +1,8 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-
+/*Kleine input wrapper. Om te zien of geklikt is dan hoeven we 
+dat niet steeds te checken in de gamecode op basis van het vorige frame etc.*/
 namespace Pong.Core
 {
     public enum MouseButton : byte

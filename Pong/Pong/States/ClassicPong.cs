@@ -23,7 +23,8 @@ namespace Pong.States
         private MODE mode;
 
         public ClassicPong() { }
-
+        /*Alle game modes zijn in deze gamestate, omdat er 
+        maar minimale verschillen zijn in de werking ervan.*/
         public void Load()
         {
             objects = new GameObject.GameObjectManager();
@@ -82,7 +83,7 @@ namespace Pong.States
                 emitBallParticles(extraball);
             particles.Update();
         }
-
+        //woosshhhh
         private void emitBallParticles(GameObject o)
         {
             Vector2 rdir = new Vector2((float)Pong.Random.NextDouble() - 0.5f, (float)Pong.Random.NextDouble() - 0.5f);
@@ -97,7 +98,8 @@ namespace Pong.States
 
             particles.Draw(batch);
             objects.Draw(time, batch);
-
+            //teken de levens of het scherm
+            //van links naar rechts voor speler 0 en andersom voor speler 1
             Color uiLivesColour = colours.PeekNextColour();
             int player2lives = 0;
             if (mode != MODE.ai) player2lives = paddle1.Lives;

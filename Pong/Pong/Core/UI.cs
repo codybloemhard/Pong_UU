@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-
+//Buttons, text, etc. Simpel en spreekt voor zich.
 namespace Pong.Core
 {
     public static class UI
